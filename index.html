@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portfolio Generator</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --accent-color: #e74c3c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .generator-section, .preview-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .skills-container, .projects-container, .education-container {
+            margin-bottom: 15px;
+        }
+
+        .skill-item, .project-item, .education-item {
+            background-color: var(--light-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 3px 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .add-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .add-btn:hover {
+            background-color: #27ae60;
+        }
+
+        button[type="submit"] {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        .preview-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            min-height: 500px;
+            background-color: white;
+        }
+
+        .portfolio-template {
+            max-width: 800px;
+            margin: 0 auto;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .portfolio-header {
+            text-align: center;
+            padding: 30px 0;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+
+        .portfolio-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .portfolio-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .portfolio-section {
+            margin-bottom: 30px;
+        }
+
+        .portfolio-section h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .about-me p {
+            text-align: justify;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-item i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            background-color: var(--light-color);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .project {
+            margin-bottom: 20px;
+        }
+
+        .project h4 {
+            color: var(--dark-color);
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+
+        .project-date {
+            color: #777;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .education-item-preview {
+            margin-bottom: 20px;
+        }
+
+        .education-item-preview h4 {
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+
+        .education-details {
+            display: flex;
+            justify-content: space-between;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .download-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .download-btn:hover {
+            background-color: #27ae60;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #ddd;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+
+        .tab.active {
+            background-color: white;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .portfolio-header h2 {
+                font-size: 2rem;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Student Portfolio Generator</h1>
+            <p>Create a professional portfolio without any API keys</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('generator')">Generator</button>
+            <button class="tab" onclick="openTab('preview')">Preview</button>
+        </div>
+
+        <div id="generator" class="tab-content active">
+            <div class="generator-section">
+                <form id="portfolioForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" required placeholder="John Doe">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="title">Professional Title</label>
+                        <input type="text" id="title" required placeholder="Computer Science Student">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="about">About Me</label>
+                        <textarea id="about" required placeholder="Tell us about yourself, your skills, and your goals"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required placeholder="john@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" placeholder="+1 234 567 890">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="linkedin">LinkedIn Profile</label>
+                        <input type="url" id="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="github">GitHub Profile</label>
+                        <input type="url" id="github" placeholder="https://github.com/yourusername">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Skills</label>
+                        <div class="skills-container" id="skillsContainer">
+                            <!-- Skills will be added here -->
+                        </div>
+                        <button type="button" class="add-btn" onclick="addSkill()">Add Skill</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Projects</label>
+                        <div class="projects-container" id="projectsContainer">
+                            <!-- Projects will be added here -->
+                        </div>
+                        <button type="button" class="add-btn" onclick="addProject()">Add Project</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Education</label>
+                        <div class="education-container" id="educationContainer">
+                            <!-- Education items will be added here -->
+                        </div>
+                        <button type="button" class="add-btn" onclick="addEducation()">Add Education</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="template">Select Template Style</label>
+                        <select id="template">
+                            <option value="professional">Professional</option>
+                            <option value="modern">Modern</option>
+                            <option value="creative">Creative</option>
+                        </select>
+                    </div>
+
+                    <button type="button" onclick="generatePortfolio()">Generate Portfolio</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="preview" class="tab-content">
+            <div class="preview-section">
+                <h2>Your Portfolio Preview</h2>
+                <div class="preview-container" id="portfolioPreview">
+                    <p>Fill out the form and click "Generate Portfolio" to see your preview here.</p>
+                </div>
+                <button class="download-btn" onclick="downloadPortfolio()">Download Portfolio as HTML</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        function openTab(tabName) {
+            const tabs = document.getElementsByClassName('tab');
+            const tabContents = document.getElementsByClassName('tab-content');
+
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+                tabContents[i].classList.remove('active');
+            }
+
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Add skill field
+        function addSkill() {
+            const container = document.getElementById('skillsContainer');
+            const skillId = Date.now();
+            
+            const skillDiv = document.createElement('div');
+            skillDiv.className = 'skill-item';
+            skillDiv.innerHTML = `
+                <input type="text" placeholder="Skill name (e.g., JavaScript)" id="skill-${skillId}" required>
+                <select id="skill-level-${skillId}">
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                    <option value="expert">Expert</option>
+                </select>
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+            `;
+            
+            container.appendChild(skillDiv);
+        }
+
+        // Add project field
+        function addProject() {
+            const container = document.getElementById('projectsContainer');
+            const projectId = Date.now();
+            
+            const projectDiv = document.createElement('div');
+            projectDiv.className = 'project-item';
+            projectDiv.innerHTML = `
+                <input type="text" placeholder="Project name" id="project-name-${projectId}" required>
+                <input type="text" placeholder="Project URL (optional)" id="project-url-${projectId}">
+                <input type="text" placeholder="Date (e.g., Jan 2023 - Present)" id="project-date-${projectId}">
+                <textarea placeholder="Project description" id="project-desc-${projectId}" required></textarea>
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+            `;
+            
+            container.appendChild(projectDiv);
+        }
+
+        // Add education field
+        function addEducation() {
+            const container = document.getElementById('educationContainer');
+            const eduId = Date.now();
+            
+            const eduDiv = document.createElement('div');
+            eduDiv.className = 'education-item';
+            eduDiv.innerHTML = `
+                <input type="text" placeholder="Institution name" id="edu-institution-${eduId}" required>
+                <input type="text" placeholder="Degree/Certificate" id="edu-degree-${eduId}" required>
+                <input type="text" placeholder="Field of study" id="edu-field-${eduId}" required>
+                <input type="text" placeholder="Dates attended" id="edu-dates-${eduId}" required>
+                <textarea placeholder="Description (optional)" id="edu-desc-${eduId}"></textarea>
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+            `;
+            
+            container.appendChild(eduDiv);
+        }
+
+        // Generate portfolio preview
+        function generatePortfolio() {
+            // Get form values
+            const name = document.getElementById('name').value;
+            const title = document.getElementById('title').value;
+            const about = document.getElementById('about').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const linkedin = document.getElementById('linkedin').value;
+            const github = document.getElementById('github').value;
+            const template = document.getElementById('template').value;
+
+            // Get skills
+            const skills = [];
+            const skillItems = document.querySelectorAll('.skill-item');
+            skillItems.forEach(item => {
+                const skillId = item.querySelector('input').id.split('-')[1];
+                skills.push({
+                    name: document.getElementById(`skill-${skillId}`).value,
+                    level: document.getElementById(`skill-level-${skillId}`).value
+                });
+            });
+
+            // Get projects
+            const projects = [];
+            const projectItems = document.querySelectorAll('.project-item');
+            projectItems.forEach(item => {
+                const projectId = item.querySelector('input').id.split('-')[2];
+                projects.push({
+                    name: document.getElementById(`project-name-${projectId}`).value,
+                    url: document.getElementById(`project-url-${projectId}`).value,
+                    date: document.getElementById(`project-date-${projectId}`).value,
+                    description: document.getElementById(`project-desc-${projectId}`).value
+                });
+            });
+
+            // Get education
+            const education = [];
+            const eduItems = document.querySelectorAll('.education-item');
+            eduItems.forEach(item => {
+                const eduId = item.querySelector('input').id.split('-')[2];
+                education.push({
+                    institution: document.getElementById(`edu-institution-${eduId}`).value,
+                    degree: document.getElementById(`edu-degree-${eduId}`).value,
+                    field: document.getElementById(`edu-field-${eduId}`).value,
+                    dates: document.getElementById(`edu-dates-${eduId}`).value,
+                    description: document.getElementById(`edu-desc-${eduId}`).value
+                });
+            });
+
+            // Generate HTML for the portfolio
+            let portfolioHTML = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>${name}'s Portfolio</title>
+                    <style>
+                        body {
+                            font-family: 'Arial', sans-serif;
+                            line-height: 1.6;
+                            color: #333;
+                            max-width: 800px;
+                            margin: 0 auto;
+                            padding: 20px;
+                        }
+                        .header {
+                            text-align: center;
+                            padding: 30px 0;
+                            background-color: ${template === 'professional' ? '#3498db' : template === 'modern' ? '#2c3e50' : '#e74c3c'};
+                            color: white;
+                            border-radius: 5px;
+                            margin-bottom: 30px;
+                        }
+                        .header h1 {
+                            margin: 0;
+                            font-size: 2.5rem;
+                        }
+                        .header p {
+                            margin: 5px 0 0;
+                            font-size: 1.2rem;
+                            opacity: 0.9;
+                        }
+                        .section {
+                            margin-bottom: 30px;
+                        }
+                        .section h2 {
+                            color: ${template === 'professional' ? '#3498db' : template === 'modern' ? '#2c3e50' : '#e74c3c'};
+                            border-bottom: 2px solid ${template === 'professional' ? '#3498db' : template === 'modern' ? '#2c3e50' : '#e74c3c'};
+                            padding-bottom: 5px;
+                            margin-bottom: 15px;
+                        }
+                        .contact-info {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 20px;
+                        }
+                        .contact-item {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                        }
+                        .skills-list {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 10px;
+                        }
+                        .skill-tag {
+                            background-color: #f0f0f0;
+                            padding: 5px 15px;
+                            border-radius: 20px;
+                        }
+                        .project {
+                            margin-bottom: 20px;
+                        }
+                        .project h3 {
+                            margin: 0 0 5px 0;
+                        }
+                        .project-date {
+                            color: #777;
+                            font-style: italic;
+                            margin-bottom: 10px;
+                        }
+                        .education-item {
+                            margin-bottom: 20px;
+                        }
+                        .education-item h3 {
+                            margin: 0 0 5px 0;
+                        }
+                        .education-details {
+                            display: flex;
+                            justify-content: space-between;
+                            color: #777;
+                        }
+                        a {
+                            color: ${template === 'professional' ? '#3498db' : template === 'modern' ? '#2c3e50' : '#e74c3c'};
+                            text-decoration: none;
+                        }
+                        a:hover {
+                            text-decoration: underline;
+                        }
+                        @media (max-width: 600px) {
+                            .header h1 {
+                                font-size: 2rem;
+                            }
+                            .contact-info {
+                                flex-direction: column;
+                                gap: 10px;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>${name}</h1>
+                        <p>${title}</p>
+                    </div>
+
+                    <div class="section about">
+                        <h2>About Me</h2>
+                        <p>${about.replace(/\n/g, '<br>')}</p>
+                    </div>
+
+                    <div class="section contact">
+                        <h2>Contact Information</h2>
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <span>📧</span>
+                                <a href="mailto:${email}">${email}</a>
+                            </div>
+                            ${phone ? `<div class="contact-item">
+                                <span>📱</span>
+                                <span>${phone}</span>
+                            </div>` : ''}
+                            ${linkedin ? `<div class="contact-item">
+                                <span>🔗</span>
+                                <a href="${linkedin}" target="_blank">LinkedIn Profile</a>
+                            </div>` : ''}
+                            ${github ? `<div class="contact-item">
+                                <span>💻</span>
+                                <a href="${github}" target="_blank">GitHub Profile</a>
+                            </div>` : ''}
+                        </div>
+                    </div>
+
+                    <div class="section skills">
+                        <h2>Skills</h2>
+                        <div class="skills-list">
+                            ${skills.map(skill => `
+                                <div class="skill-tag">
+                                    ${skill.name} (${skill.level})
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="section projects">
+                        <h2>Projects</h2>
+                        ${projects.map(project => `
+                            <div class="project">
+                                <h3>${project.url ? `<a href="${project.url}" target="_blank">${project.name}</a>` : project.name}</h3>
+                                ${project.date ? `<div class="project-date">${project.date}</div>` : ''}
+                                <p>${project.description.replace(/\n/g, '<br>')}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="section education">
+                        <h2>Education</h2>
+                        ${education.map(edu => `
+                            <div class="education-item">
+                                <h3>${edu.degree} in ${edu.field}</h3>
+                                <div class="education-details">
+                                    <span>${edu.institution}</span>
+                                    <span>${edu.dates}</span>
+                                </div>
+                                ${edu.description ? `<p>${edu.description.replace(/\n/g, '<br>')}</p>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </body>
+                </html>
+            `;
+
+            // Display preview
+            document.getElementById('portfolioPreview').innerHTML = portfolioHTML;
+            
+            // Switch to preview tab
+            document.querySelector('.tab.active').classList.remove('active');
+            document.querySelector('.tab-content.active').classList.remove('active');
+            document.querySelectorAll('.tab')[1].classList.add('active');
+            document.getElementById('preview').classList.add('active');
+        }
+
+        // Download portfolio as HTML file
+        function downloadPortfolio() {
+            const portfolioContent = document.getElementById('portfolioPreview').innerHTML;
+            const name = document.getElementById('name').value || 'portfolio';
+            
+            const blob = new Blob([portfolioContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${name.replace(/\s+/g, '-').toLowerCase()}-portfolio.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize with one empty field for each section
+        window.onload = function() {
+            addSkill();
+            addProject();
+            addEducation();
+        };
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portfolio Generator</title>
+    <!-- Add jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* [Previous CSS content remains exactly the same] */
+        .download-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .download-btn {
+            width: auto;
+            flex: 1;
+        }
+        .pdf-download-btn {
+            background-color: #e74c3c;
+        }
+        .pdf-download-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <!-- [Previous HTML content remains exactly the same until the download button] -->
+    
+    <!-- Replace the single download button with this download options section: -->
+    <div class="download-options">
+        <button class="download-btn" onclick="downloadPortfolio()">Download as HTML</button>
+        <button class="download-btn pdf-download-btn" onclick="downloadPDF()">Download as PDF</button>
+    </div>
+
+    <script>
+        // Initialize jsPDF
+        const { jsPDF } = window.jspdf;
+
+        // [All previous JavaScript functions remain the same until the end]
+
+        // Add this new function for PDF download
+        function downloadPDF() {
+            const portfolioPreview = document.getElementById('portfolioPreview');
+            const name = document.getElementById('name').value || 'portfolio';
+            
+            // Use html2canvas to capture the portfolio as an image
+            html2canvas(portfolioPreview, {
+                scale: 2, // Higher quality
+                logging: false,
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = pdf.internal.pageSize.getWidth();
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                pdf.save(`${name.replace(/\s+/g, '-').toLowerCase()}-portfolio.pdf`);
+            });
+        }
+
+        // [Rest of your existing JavaScript code]
+    </script>
+</body>
+</html>
